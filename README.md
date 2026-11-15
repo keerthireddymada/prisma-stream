@@ -4,7 +4,6 @@
 **Course Project:** Supervised Machine Learning / Data Science  
 **Topic:** Decision Tree Classification, Impurity Measures, Information Gain, and Model Generalization  
 **Stack:** React 18, HTML5 Canvas, Vanilla JavaScript (ES Modules), CSS3  
-**Status:** All 5 phases complete, 100% test coverage passing, audio removed, playtest evidence PDF system integrated.
 
 ---
 
@@ -16,7 +15,7 @@ Decision trees are one of the most foundational models in machine learning. Howe
 - **The Data Stream:** A continuous stream of geometric particles flows from left to right. Each particle represents a single row in a dataset, with observable features (**Shape**, **Color**, **Size**) and an underlying target classification (**Alpha**, **Beta**, or **Gamma**).
 - **Splitter Prisms (Decision Nodes):** The player places prisms onto grid intersections. Each prism evaluates a binary condition (e.g., `COLOR == BLUE` or `SHAPE == CIRCLE`), splitting the incoming stream into **UP** (True) and **DOWN** (False) trajectories.
 - **Output Bins (Leaf Nodes):** Streams terminate at collection bins on the right. A bin is considered **Stable (Pure)** only when 100% of the particles entering it belong to the exact same target class ($\text{Gini} = 0.000$).
-- **Energy Limit (Tree Depth & Occam's Razor):** Placing a prism consumes 1 Energy unit. This budget prevents players from endlessly branching, reinforcing the principle that simpler models that generalize to unseen data are preferred over bloated models that memorize training anomalies.
+- **Energy Limit :** Placing a prism consumes 1 Energy unit. This budget prevents players from endlessly branching, reinforcing the principle that simpler models that generalize to unseen data are preferred over bloated models that memorize training anomalies.
 
 ---
 
@@ -146,15 +145,6 @@ python3 tests/check_css.py
    - Level 5: Multi-attribute synthesis verified [PASSED]
 ✔ All 5 Game Levels verified.
 
-=======================================================
-ALL PRISMA STREAM DATA SCIENCE SUITE TESTS PASSED 100%!
-=======================================================
-```
-
-### CSS Verification
-```
-Used: 131, Defined: 166, Missing: 0
-All CSS classes in active game files are defined!
 ```
 
 ---
