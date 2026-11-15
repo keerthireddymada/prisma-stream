@@ -1762,3 +1762,217 @@ html, body {
   margin: 3px auto 0;
   box-shadow: 0 0 5px rgba(16, 185, 129, 0.6);
 }
+
+
+/* ─── ENHANCED GAME UI OVERHAUL ─── */
+
+/* 1. Welcome Screen Cards & Layout */
+.welcome-container {
+  max-width: 620px;
+}
+
+.welcome-pill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-cyan);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 4px 14px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.welcome-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.rule-mini-card {
+  background: rgba(14, 20, 34, 0.8);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.rule-mini-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.rule-mini-icon {
+  font-size: 16px;
+}
+
+.text-cyan { color: var(--color-cyan); }
+.text-emerald { color: var(--color-emerald); }
+.text-orange { color: var(--color-orange); }
+
+.rule-mini-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11.5px;
+  color: var(--text-main);
+  letter-spacing: 0.3px;
+}
+
+.rule-mini-desc {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* 2. Left Panel Tool Buttons */
+.tool-btn-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tool-btn-main {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.tool-btn-sub {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.prism-tool-btn.selected .tool-btn-sub {
+  color: var(--color-cyan);
+}
+
+.prism-tool-btn {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  transition: all 0.2s ease;
+}
+
+.prism-tool-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-medium);
+  transform: translateX(2px);
+}
+
+.prism-tool-btn.selected {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.2);
+}
+
+/* 3. Objective Collapsible Details */
+.objective-details {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.objective-summary {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background: var(--bg-surface);
+  user-select: none;
+  list-style: none;
+}
+
+.objective-summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--text-main);
+}
+
+.summary-badge {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--color-cyan);
+  background: rgba(56, 189, 248, 0.1);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.objective-card-content {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* 4. Right Panel Empty Telemetry Box */
+.empty-telemetry-box {
+  background: rgba(10, 16, 28, 0.5);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.empty-telemetry-icon {
+  font-size: 22px;
+  color: var(--color-cyan);
+  opacity: 0.6;
+}
+
+.empty-telemetry-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* 5. Smooth Global Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-medium);
+}
+
+
+.metrics-always-visible {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}

@@ -619,12 +619,12 @@ export class SimulationEngine {
       ctx.textAlign = "center";
       ctx.fillText(prism.label, 0, -size - 7);
 
-      // Branch Directional Indicators: T (Up) & F (Down)
-      ctx.font = "700 9px sans-serif";
+      // Branch Directional Indicators: clean minimal True / False
+      ctx.font = "600 8.5px 'JetBrains Mono', monospace";
       ctx.fillStyle = "#38bdf8";
-      ctx.fillText("T ↑", size * 0.55, -size * 0.45);
+      ctx.fillText("YES", size * 0.55, -size * 0.45);
       ctx.fillStyle = "#fb923c";
-      ctx.fillText("F ↓", size * 0.55, size * 0.55);
+      ctx.fillText("NO", size * 0.55, size * 0.55);
 
       ctx.restore();
     }

@@ -35,6 +35,7 @@ export function PrismaStreamApp() {
   const [showMathDetails, setShowMathDetails] = useState(false);
   const [streamMode, setStreamMode] = useState("train"); // "train" | "test"
   const [completedLevels, setCompletedLevels] = useState(new Set());
+  const [runSeed, setRunSeed] = useState(() => Math.floor(Math.random() * 100000));
 
   // Playtest reflection questionnaire & report state
   const [playtestFeedback, setPlaytestFeedback] = useState({
@@ -82,7 +83,7 @@ export function PrismaStreamApp() {
     }
 
     const generator = new StreamGenerator({
-      seed: 42 + levelIndex * 19,
+      seed: runSeed + levelIndex * 31,
       mode: "train",
       ...currentLevel.streamDistribution
     });
@@ -250,6 +251,7 @@ export function PrismaStreamApp() {
     if (!playerName.trim()) {
       setPlayerName("Player");
     }
+    setRunSeed(Math.floor(Math.random() * 100000) + 1);
     setGameStarted(true);
   };
 
@@ -299,9 +301,37 @@ export function PrismaStreamApp() {
         React.createElement(
           "div",
           { className: "welcome-hero" },
+          React.createElement("div", { className: "welcome-pill" }, "LOGIC PUZZLE EXPERIMENT"),
           React.createElement("h1", { className: "welcome-title" }, "PRISMA STREAM"),
           React.createElement("p", { className: "welcome-subtitle" },
-            "A geometric logic-puzzle game exploring Decision Trees and Information Gain."
+            "A geometric laser-routing puzzle game that intuitively teaches how Decision Trees work."
+          )
+        ),
+
+        // Quick visual rule preview cards (no jargon, intuitive icons)
+        React.createElement(
+          "div",
+          { className: "welcome-rules-grid" },
+          React.createElement(
+            "div",
+            { className: "rule-mini-card" },
+            React.createElement("div", { className: "rule-mini-icon text-cyan" }, "◆"),
+            React.createElement("div", { className: "rule-mini-title" }, "Route Streams"),
+            React.createElement("div", { className: "rule-mini-desc" }, "Objects enter with shapes, colors, and sizes.")
+          ),
+          React.createElement(
+            "div",
+            { className: "rule-mini-card" },
+            React.createElement("div", { className: "rule-mini-icon text-emerald" }, "⬡"),
+            React.createElement("div", { className: "rule-mini-title" }, "Place Splitters"),
+            React.createElement("div", { className: "rule-mini-desc" }, "Ask yes/no questions to divide the flow.")
+          ),
+          React.createElement(
+            "div",
+            { className: "rule-mini-card" },
+            React.createElement("div", { className: "rule-mini-icon text-orange" }, "◎"),
+            React.createElement("div", { className: "rule-mini-title" }, "Pure Bins"),
+            React.createElement("div", { className: "rule-mini-desc" }, "Cleanly separate each class into its own bin.")
           )
         ),
 
@@ -568,7 +598,7 @@ export function PrismaStreamApp() {
         React.createElement(
           "div",
           { className: "tool-group" },
-          React.createElement("div", { className: "group-header" }, "COLOR FEATURES"),
+          React.createElement("div", { className: "group-header" }, "SPLIT BY COLOR"),
           React.createElement(
             "button",
             {
@@ -579,7 +609,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol color-blue" }, "◆"),
-            "COLOR == BLUE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Color Blue?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           ),
           React.createElement(
             "button",
@@ -591,7 +624,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol color-orange" }, "◆"),
-            "COLOR == ORANGE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Color Orange?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           )
         ),
 
@@ -599,7 +635,7 @@ export function PrismaStreamApp() {
         currentLevel.id >= 2 && React.createElement(
           "div",
           { className: "tool-group" },
-          React.createElement("div", { className: "group-header" }, "SHAPE FEATURES"),
+          React.createElement("div", { className: "group-header" }, "SPLIT BY SHAPE"),
           React.createElement(
             "button",
             {
@@ -610,7 +646,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol" }, "●"),
-            "SHAPE == CIRCLE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Shape Circle?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           ),
           React.createElement(
             "button",
@@ -622,7 +661,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol" }, "■"),
-            "SHAPE == SQUARE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Shape Square?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           ),
           React.createElement(
             "button",
@@ -634,7 +676,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol" }, "▲"),
-            "SHAPE == TRIANGLE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Shape Triangle?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           )
         ),
 
@@ -642,7 +687,7 @@ export function PrismaStreamApp() {
         currentLevel.id >= 3 && React.createElement(
           "div",
           { className: "tool-group" },
-          React.createElement("div", { className: "group-header" }, "SIZE FEATURES"),
+          React.createElement("div", { className: "group-header" }, "SPLIT BY SIZE"),
           React.createElement(
             "button",
             {
@@ -653,7 +698,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol" }, "⬡"),
-            "SIZE == LARGE"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Size Large?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           ),
           React.createElement(
             "button",
@@ -665,7 +713,10 @@ export function PrismaStreamApp() {
               }
             },
             React.createElement("span", { className: "prism-symbol" }, "⬝"),
-            "SIZE == SMALL"
+            React.createElement("div", { className: "tool-btn-content" },
+              React.createElement("span", { className: "tool-btn-main" }, "Is Size Small?"),
+              React.createElement("span", { className: "tool-btn-sub" }, "YES → UP  |  NO → DOWN")
+            )
           )
         ),
 
@@ -714,7 +765,7 @@ export function PrismaStreamApp() {
           React.createElement("div", { className: "obj-concept" }, currentLevel.concept),
           React.createElement("div", { className: "obj-body" }, currentLevel.description),
 
-          // Contextual Hints System
+          // Contextual Hints & Concept Learning System
           React.createElement(
             "div",
             { className: "hint-box" },
@@ -920,7 +971,51 @@ export function PrismaStreamApp() {
             })()
           ),
 
-          // Mathematical Derivation Toggle — hidden by default
+          // Core Information Gain & Gini Gain Telemetry Metrics
+          React.createElement(
+            "div",
+            { className: "metrics-always-visible" },
+            React.createElement(
+              "div",
+              { className: "metric-block" },
+              React.createElement("div", { className: "metric-label" }, "SHANNON INFORMATION GAIN"),
+              React.createElement(
+                "div",
+                { className: "metric-val val-info" },
+                `+${(inspectedPrism.infoGain || 0).toFixed(4)} bits`
+              ),
+              React.createElement(
+                "div",
+                { className: "meter-hint" },
+                "Measures uncertainty removed. Laser lines pulse with this value."
+              )
+            ),
+            React.createElement(
+              "div",
+              { className: "metric-block" },
+              React.createElement("div", { className: "metric-label" }, "GINI GAIN (Δ GINI)"),
+              React.createElement(
+                "div",
+                { className: "metric-val val-gain" },
+                `+${(inspectedPrism.giniGain || 0).toFixed(4)}`
+              ),
+              React.createElement(
+                "div",
+                { className: "gain-meter" },
+                React.createElement("div", {
+                  className: "gain-bar",
+                  style: { width: `${Math.min(100, (inspectedPrism.giniGain || 0) * 200)}%` }
+                })
+              ),
+              React.createElement(
+                "div",
+                { className: "meter-hint" },
+                "Weighted reduction in impurity across the two output branches."
+              )
+            )
+          ),
+
+          // Mathematical Formulas Accordion
           React.createElement(
             "div",
             { className: "math-accordion" },
@@ -930,56 +1025,12 @@ export function PrismaStreamApp() {
                 className: "btn-accordion-toggle",
                 onClick: () => setShowMathDetails(prev => !prev)
               },
-              showMathDetails ? "HIDE CALCULATIONS" : "VIEW CALCULATIONS"
+              showMathDetails ? "HIDE STEP-BY-STEP FORMULAS ▲" : "VIEW STEP-BY-STEP FORMULAS ▼"
             ),
-            showMathDetails && React.createElement(
+            showMathDetails && inspectedPrism.mathBreakdown && React.createElement(
               "div",
               { className: "math-expanded" },
-
-              // Gini Gain Block
               React.createElement(
-                "div",
-                { className: "metric-block" },
-                React.createElement("div", { className: "metric-label" }, "GINI GAIN (Δ GINI)"),
-                React.createElement(
-                  "div",
-                  { className: "metric-val val-gain" },
-                  `+${(inspectedPrism.giniGain || 0).toFixed(4)}`
-                ),
-                React.createElement(
-                  "div",
-                  { className: "gain-meter" },
-                  React.createElement("div", {
-                    className: "gain-bar",
-                    style: { width: `${Math.min(100, (inspectedPrism.giniGain || 0) * 200)}%` }
-                  })
-                ),
-                React.createElement(
-                  "div",
-                  { className: "meter-hint" },
-                  "Reduction in Gini impurity, weighted by child branch sizes."
-                )
-              ),
-
-              // Information Gain Block
-              React.createElement(
-                "div",
-                { className: "metric-block" },
-                React.createElement("div", { className: "metric-label" }, "SHANNON INFORMATION GAIN"),
-                React.createElement(
-                  "div",
-                  { className: "metric-val val-info" },
-                  `+${(inspectedPrism.infoGain || 0).toFixed(4)} bits`
-                ),
-                React.createElement(
-                  "div",
-                  { className: "meter-hint" },
-                  "Reduction in Shannon disorder (H). Wire brightness pulses with this value."
-                )
-              ),
-
-              // Exact Formulas
-              inspectedPrism.mathBreakdown && React.createElement(
                 "div",
                 { className: "math-breakdown-details" },
                 React.createElement("div", { className: "formula-line" },
@@ -999,8 +1050,9 @@ export function PrismaStreamApp() {
           )
         ) : React.createElement(
           "div",
-          { className: "empty-telemetry" },
-          "Click any placed splitter to inspect its split quality."
+          { className: "empty-telemetry-box" },
+          React.createElement("div", { className: "empty-telemetry-icon" }, "◈"),
+          React.createElement("div", { className: "empty-telemetry-text" }, "Click any placed splitter prism on the grid to inspect how effectively it divides the data flow.")
         ),
 
         // Live Output Bins Monitor (Pure Leaves)
@@ -1384,6 +1436,7 @@ export function PrismaStreamApp() {
               onClick: () => {
                 setShowEnding(false);
                 setLevelIndex(0);
+                setRunSeed(Math.floor(Math.random() * 100000) + 1);
               }
             },
             "PLAY AGAIN"
