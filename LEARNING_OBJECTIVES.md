@@ -1,12 +1,5 @@
-# LEARNING OBJECTIVES & SYLLABUS MAPPING
+# LEARNING OBJECTIVES
 ## PRISMA STREAM: The Geometric Decision Tree Synthesizer
-
-This document details the pedagogical framework, syllabus alignment, and academic grading mapping for **PRISMA STREAM**, mapped across the four core college Data Science project criteria:
-
-1. **Concept Coverage and Correctness** (1.5 Marks)
-2. **Game Design and Learning Loop** (1.5 Marks)
-3. **Implementation Quality & Mathematical Integrity** (1.0 Mark)
-4. **Documentation and Evidence of Learning** (1.0 Mark)
 
 ---
 
@@ -30,7 +23,7 @@ This document details the pedagogical framework, syllabus alignment, and academi
 
 ---
 
-## 2. Pedagogical Progression
+## 2. Progression
 
 The game follows a strict, progressive conceptual sequence:
 
@@ -52,26 +45,24 @@ The game follows a strict, progressive conceptual sequence:
 
 ---
 
-## 3. Academic Grading Criteria Alignment
 
-### Criteria 1: Concept Coverage and Correctness (1.5 Marks)
+### Concept Coverage and Correctness 
 * **Distinction between Features and Target Labels:** Particles visibly separate input dimensions (Shape, Color, Size) from ground-truth class symbols ($A, B, G$).
 * **Exact Mathematical Metrics:** Implements real Gini Impurity, Gini Gain, Shannon Entropy, and Information Gain with child-branch observation weighting. Never faked or hardcoded.
 * **Authentic Overfitting:** Verified empirically with separate training and unseen test generator distributions.
 
-### Criteria 2: Game Design and Learning Loop (1.5 Marks)
+### Game Design and Learning Loop 
 * **Goal:** Route continuous geometric streams into pure leaves within tree depth constraints.
 * **Decisions:** Selecting informative features and placing prisms at optimal grid intersections.
 * **Feedback:** Visual glowing laser wires (brightness $\propto$ Information Gain), pitch-scaled harmonic chimes, and live step-by-step arithmetic derivations.
 * **Progression:** 5 carefully calibrated phases introducing higher dimensions and noise.
 
-### Criteria 3: Implementation Quality & Mathematical Integrity (1.0 Mark)
+### Implementation Quality & Mathematical Integrity
 * Zero-dependency React 18 + HTML5 Canvas vector simulation with seedable Mulberry32 PRNG.
 * Smooth cubic bezier particle paths matching visual wires.
 * 100% offline-capable with built-in React fallback mini-runtime.
 
-### Criteria 4: Documentation and Evidence of Learning (1.0 Mark)
+### Documentation and Evidence of Learning 
 * Complete How-To-Play manual (`HOW_TO_PLAY.md`).
-* Syllabus mapping and pedagogical objectives (`LEARNING_OBJECTIVES.md`).
-* Pre-game and post-game diagnostic assessment inventory with scoring key (`PLAYTEST_TEMPLATE.md`).
-* Formal test verification report (`TEST_REPORT.md`).
+* Pedagogical objectives (`LEARNING_OBJECTIVES.md`).
+* Folder containing PDFs of peers' experiences and feedbacks.
