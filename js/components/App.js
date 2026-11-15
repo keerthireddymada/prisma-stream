@@ -34,6 +34,7 @@ export function PrismaStreamApp() {
   const [expandedHint, setExpandedHint] = useState("basic"); // "basic" | "why" | "math"
   const [showMathDetails, setShowMathDetails] = useState(false);
   const [streamMode, setStreamMode] = useState("train"); // "train" | "test"
+  const [completedLevels, setCompletedLevels] = useState(new Set());
 
   // Playtest reflection questionnaire & report state
   const [playtestFeedback, setPlaytestFeedback] = useState({
@@ -131,6 +132,7 @@ export function PrismaStreamApp() {
 
     if (allActiveStable && !isOverfitted && passesTestCheck && !isLevelCleared) {
       setIsLevelCleared(true);
+      setCompletedLevels(prev => new Set([...prev, levelIndex]));
       if (levelIndex === LEVELS.length - 1) {
         setShowEnding(true);
       }
@@ -480,7 +482,7 @@ export function PrismaStreamApp() {
             "button",
             {
               key: lvl.id,
-              className: `phase-btn ${idx === levelIndex ? "active" : ""}`,
+              className: `phase-btn ${idx === levelIndex ? "active" : ""} ${completedLevels.has(idx) && idx !== levelIndex ? "completed" : ""}`,
               onClick: () => {
                 setLevelIndex(idx);
               }
@@ -497,7 +499,7 @@ export function PrismaStreamApp() {
         React.createElement(
           "div",
           { className: "energy-label" },
-          isOverfitted ? "OVERFIT: DEPTH EXHAUSTED" : "TREE DEPTH BUDGET"
+          isOverfitted ? "TOO MANY NODES — OVERFITTING!" : "NODES REMAINING"
         ),
         React.createElement(
           "div",
@@ -512,7 +514,7 @@ export function PrismaStreamApp() {
         React.createElement(
           "div",
           { className: "energy-count" },
-          `${energyRemaining} / ${energyLimit} NODES`
+          `${energyUsed} placed / ${energyLimit} max`
         )
       ),
 
@@ -571,6 +573,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "color" && selectedPrismType.value === "blue" ? "selected" : ""}`,
+              title: "Sends blue objects UP, all others DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "color", value: "blue" });
               }
@@ -582,6 +585,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "color" && selectedPrismType.value === "orange" ? "selected" : ""}`,
+              title: "Sends orange objects UP, all others DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "color", value: "orange" });
               }
@@ -591,8 +595,8 @@ export function PrismaStreamApp() {
           )
         ),
 
-        // Shape Classifiers
-        React.createElement(
+        // Shape Classifiers (unlocked at Level 2+)
+        currentLevel.id >= 2 && React.createElement(
           "div",
           { className: "tool-group" },
           React.createElement("div", { className: "group-header" }, "SHAPE FEATURES"),
@@ -600,6 +604,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "shape" && selectedPrismType.value === "circle" ? "selected" : ""}`,
+              title: "Sends circles UP, squares and triangles DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "shape", value: "circle" });
               }
@@ -611,6 +616,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "shape" && selectedPrismType.value === "square" ? "selected" : ""}`,
+              title: "Sends squares UP, circles and triangles DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "shape", value: "square" });
               }
@@ -622,6 +628,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "shape" && selectedPrismType.value === "triangle" ? "selected" : ""}`,
+              title: "Sends triangles UP, circles and squares DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "shape", value: "triangle" });
               }
@@ -631,8 +638,8 @@ export function PrismaStreamApp() {
           )
         ),
 
-        // Size Classifiers
-        React.createElement(
+        // Size Classifiers (unlocked at Level 3+)
+        currentLevel.id >= 3 && React.createElement(
           "div",
           { className: "tool-group" },
           React.createElement("div", { className: "group-header" }, "SIZE FEATURES"),
@@ -640,6 +647,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "size" && selectedPrismType.value === "large" ? "selected" : ""}`,
+              title: "Sends large objects UP, small objects DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "size", value: "large" });
               }
@@ -651,6 +659,7 @@ export function PrismaStreamApp() {
             "button",
             {
               className: `prism-tool-btn ${selectedPrismType.feature === "size" && selectedPrismType.value === "small" ? "selected" : ""}`,
+              title: "Sends small objects UP, large objects DOWN",
               onClick: () => {
                 setSelectedPrismType({ feature: "size", value: "small" });
               }
@@ -752,6 +761,14 @@ export function PrismaStreamApp() {
       React.createElement(
         "div",
         { className: "canvas-container" },
+
+        // Goal Banner — 1-sentence mission above the grid
+        currentLevel.goalSentence && React.createElement(
+          "div",
+          { className: "goal-banner" },
+          React.createElement("span", { className: "goal-label" }, "GOAL"),
+          React.createElement("span", { className: "goal-text" }, currentLevel.goalSentence)
+        ),
 
         // Top Evaluation Toolbar (for Levels with Test Mode / Overfitting Verification)
         currentLevel.hasTestMode && React.createElement(
@@ -864,7 +881,7 @@ export function PrismaStreamApp() {
       React.createElement(
         "aside",
         { className: "telemetry-panel" },
-        React.createElement("div", { className: "panel-title" }, "MATHEMATICAL TELEMETRY"),
+        React.createElement("div", { className: "panel-title" }, "NODE INSPECTOR"),
 
         inspectedPrism ? React.createElement(
           "div",
@@ -872,68 +889,38 @@ export function PrismaStreamApp() {
           React.createElement("div", { className: "card-title" }, `DECISION NODE [COL ${inspectedPrism.col}, ROW ${inspectedPrism.row}]`),
           React.createElement("div", { className: "card-rule" }, inspectedPrism.label),
 
-          // Gini Gain Block
+          // Friendly Split Quality Summary
           React.createElement(
             "div",
-            { className: "metric-block" },
-            React.createElement("div", { className: "metric-label" }, "GINI GAIN (Δ GINI)"),
-            React.createElement(
-              "div",
-              { className: "metric-val val-gain" },
-              `+${(inspectedPrism.giniGain || 0).toFixed(4)}`
-            ),
-            React.createElement(
-              "div",
-              { className: "gain-meter" },
-              React.createElement("div", {
-                className: "gain-bar",
-                style: { width: `${Math.min(100, (inspectedPrism.giniGain || 0) * 200)}%` }
-              })
-            ),
-            React.createElement(
-              "div",
-              { className: "meter-hint" },
-              "Measures reduction in Gini impurity weighted by child branch sizes."
-            )
+            { className: "split-quality-block" },
+            (() => {
+              const gain = inspectedPrism.giniGain || 0;
+              const quality = gain > 0.4 ? "Excellent" : gain > 0.2 ? "Good" : gain > 0.05 ? "Weak" : "No gain";
+              const qualClass = gain > 0.4 ? "quality-excellent" : gain > 0.2 ? "quality-good" : gain > 0.05 ? "quality-weak" : "quality-none";
+              const barWidth = Math.min(100, gain * 200);
+              return [
+                React.createElement(
+                  "div",
+                  { key: "sq-label", className: "sq-header" },
+                  React.createElement("span", { className: "sq-title" }, "SPLIT QUALITY"),
+                  React.createElement("span", { key: "sq-val", className: `sq-value ${qualClass}` }, quality)
+                ),
+                React.createElement(
+                  "div",
+                  { key: "sq-bar-wrap", className: "sq-bar-track" },
+                  React.createElement("div", { className: `sq-bar-fill ${qualClass}`, style: { width: `${barWidth}%` } })
+                ),
+                React.createElement(
+                  "div",
+                  { key: "sq-counts", className: "sq-counts" },
+                  React.createElement("span", null, `Matching objects: ${inspectedPrism.trueItems ? inspectedPrism.trueItems.length : 0} UP`),
+                  React.createElement("span", null, `Others: ${inspectedPrism.falseItems ? inspectedPrism.falseItems.length : 0} DOWN`)
+                )
+              ];
+            })()
           ),
 
-          // Information Gain Block (Shannon Entropy)
-          React.createElement(
-            "div",
-            { className: "metric-block" },
-            React.createElement("div", { className: "metric-label" }, "SHANNON INFORMATION GAIN"),
-            React.createElement(
-              "div",
-              { className: "metric-val val-info" },
-              `+${(inspectedPrism.infoGain || 0).toFixed(4)} bits`
-            ),
-            React.createElement(
-              "div",
-              { className: "meter-hint" },
-              "Reduction in Shannon disorder (H). Wire brightness pulses with this value."
-            )
-          ),
-
-          // Partition Counts
-          React.createElement(
-            "div",
-            { className: "metric-block" },
-            React.createElement("div", { className: "metric-label" }, "BRANCH PARTITION COUNTS"),
-            React.createElement("div", { className: "stat-line" },
-              React.createElement("span", null, "Parent Stream (Total):"),
-              React.createElement("strong", null, inspectedPrism.parentItems ? inspectedPrism.parentItems.length : 0)
-            ),
-            React.createElement("div", { className: "stat-line" },
-              React.createElement("span", null, "True Branch (UP):"),
-              React.createElement("strong", null, inspectedPrism.trueItems ? inspectedPrism.trueItems.length : 0)
-            ),
-            React.createElement("div", { className: "stat-line" },
-              React.createElement("span", null, "False Branch (DOWN):"),
-              React.createElement("strong", null, inspectedPrism.falseItems ? inspectedPrism.falseItems.length : 0)
-            )
-          ),
-
-          // Mathematical Derivation Accordion
+          // Mathematical Derivation Toggle — hidden by default
           React.createElement(
             "div",
             { className: "math-accordion" },
@@ -943,29 +930,77 @@ export function PrismaStreamApp() {
                 className: "btn-accordion-toggle",
                 onClick: () => setShowMathDetails(prev => !prev)
               },
-              showMathDetails ? "HIDE CALCULATION FORMULAS ▲" : "SHOW EXACT FORMULAS & NUMBERS ▼"
+              showMathDetails ? "HIDE CALCULATIONS" : "VIEW CALCULATIONS"
             ),
-            showMathDetails && inspectedPrism.mathBreakdown && React.createElement(
+            showMathDetails && React.createElement(
               "div",
-              { className: "math-breakdown-details" },
-              React.createElement("div", { className: "formula-line" },
-                React.createElement("div", { className: "formula-title" }, "1. Parent Gini Impurity:"),
-                React.createElement("code", null, inspectedPrism.mathBreakdown.giniFormulaStr)
+              { className: "math-expanded" },
+
+              // Gini Gain Block
+              React.createElement(
+                "div",
+                { className: "metric-block" },
+                React.createElement("div", { className: "metric-label" }, "GINI GAIN (Δ GINI)"),
+                React.createElement(
+                  "div",
+                  { className: "metric-val val-gain" },
+                  `+${(inspectedPrism.giniGain || 0).toFixed(4)}`
+                ),
+                React.createElement(
+                  "div",
+                  { className: "gain-meter" },
+                  React.createElement("div", {
+                    className: "gain-bar",
+                    style: { width: `${Math.min(100, (inspectedPrism.giniGain || 0) * 200)}%` }
+                  })
+                ),
+                React.createElement(
+                  "div",
+                  { className: "meter-hint" },
+                  "Reduction in Gini impurity, weighted by child branch sizes."
+                )
               ),
-              React.createElement("div", { className: "formula-line" },
-                React.createElement("div", { className: "formula-title" }, "2. Weighted Gini Gain:"),
-                React.createElement("code", null, inspectedPrism.mathBreakdown.giniGainStr)
+
+              // Information Gain Block
+              React.createElement(
+                "div",
+                { className: "metric-block" },
+                React.createElement("div", { className: "metric-label" }, "SHANNON INFORMATION GAIN"),
+                React.createElement(
+                  "div",
+                  { className: "metric-val val-info" },
+                  `+${(inspectedPrism.infoGain || 0).toFixed(4)} bits`
+                ),
+                React.createElement(
+                  "div",
+                  { className: "meter-hint" },
+                  "Reduction in Shannon disorder (H). Wire brightness pulses with this value."
+                )
               ),
-              React.createElement("div", { className: "formula-line" },
-                React.createElement("div", { className: "formula-title" }, "3. Shannon Information Gain:"),
-                React.createElement("code", null, inspectedPrism.mathBreakdown.infoGainStr)
+
+              // Exact Formulas
+              inspectedPrism.mathBreakdown && React.createElement(
+                "div",
+                { className: "math-breakdown-details" },
+                React.createElement("div", { className: "formula-line" },
+                  React.createElement("div", { className: "formula-title" }, "1. Parent Gini Impurity:"),
+                  React.createElement("code", null, inspectedPrism.mathBreakdown.giniFormulaStr)
+                ),
+                React.createElement("div", { className: "formula-line" },
+                  React.createElement("div", { className: "formula-title" }, "2. Weighted Gini Gain:"),
+                  React.createElement("code", null, inspectedPrism.mathBreakdown.giniGainStr)
+                ),
+                React.createElement("div", { className: "formula-line" },
+                  React.createElement("div", { className: "formula-title" }, "3. Shannon Information Gain:"),
+                  React.createElement("code", null, inspectedPrism.mathBreakdown.infoGainStr)
+                )
               )
             )
           )
         ) : React.createElement(
           "div",
           { className: "empty-telemetry" },
-          "Click or hover over any placed Splitter Prism to inspect real-time mathematical Gini Gain, Information Gain, and live formulas."
+          "Click any placed splitter to inspect its split quality."
         ),
 
         // Live Output Bins Monitor (Pure Leaves)

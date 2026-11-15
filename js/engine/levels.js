@@ -12,28 +12,31 @@ export const LEVELS = [
     concept: "Features, Target Classes & Binary Partitioning",
     subtitle: "Separating observations into pure outcome groups",
     description: "A continuous flow of data objects is entering the system. Each object has observable features (Color, Shape, Size) and a hidden Target Class (Alpha or Beta). Place a Splitter Prism to route each target class into its own pure Output Bin.",
+    goalSentence: "Route all Blue objects to one bin and all Orange objects to the other — shape does not matter here.",
     energyLimit: 1, // Max 1 Prism (Depth 1)
     gridCols: 5,
     gridRows: 5,
     spawnInterval: 1100, // Relaxed, observable pacing
     manifest: {
-      shapes: ["Circle"],
+      shapes: ["Circle", "Square"],
       colors: ["Blue", "Orange"],
       sizes: ["Large"],
-      profiles: ["Blue Circle (Large)", "Orange Circle (Large)"]
+      profiles: ["Blue Circle (Large)", "Blue Square (Large)", "Orange Circle (Large)", "Orange Square (Large)"]
     },
     streamDistribution: {
-      shapes: { circle: 1.0, square: 0.0, triangle: 0.0 },
-      colors: { blue: 0.5, orange: 0.5 },
-      sizes: { small: 0.0, large: 1.0 },
-      targetRule: (f) => f.color === "blue" ? "Alpha" : "Beta"
+      conditional: (rng) => {
+        const color = rng() < 0.5 ? "blue" : "orange";
+        const shape = rng() < 0.5 ? "circle" : "square";
+        const targetClass = color === "blue" ? "Alpha" : "Beta";
+        return { shape, color, size: "large", targetClass };
+      }
     },
     targetClasses: ["Alpha", "Beta"],
     requiredPureBins: 2,
     hints: {
-      basic: "A prism asks a yes-or-no question about an object's feature. Objects that meet the condition take the UP track; others take the DOWN track.",
-      why: "In Machine Learning, a decision node splits data based on an input feature to isolate the target classes (Alpha vs Beta).",
-      math: "Initial Gini impurity is 0.500 (equal 50/50 mixture). A split on COLOR separates them into two 100% pure groups (Gini = 0.000), giving maximum Gini Gain of +0.500."
+      basic: "Look at the objects carefully — they have different shapes AND colors. Only one of these features perfectly separates Alpha from Beta. Try a Color prism first.",
+      why: "In Machine Learning, a decision node splits data based on an input feature to isolate the target classes (Alpha vs Beta). A good feature is one where knowing it removes all uncertainty.",
+      math: "Initial Gini impurity is 0.500 (equal 50/50 mixture). A split on COLOR separates them into two 100% pure groups (Gini = 0.000), giving maximum Gini Gain of +0.500. Splitting on SHAPE gives zero gain because both classes have circles and squares."
     }
   },
   {
@@ -42,6 +45,7 @@ export const LEVELS = [
     concept: "Recursive Branching & Tree Hierarchy",
     subtitle: "Multi-class classification using hierarchical decision nodes",
     description: "Three distinct target classes (Alpha, Beta, Gamma) now enter the system. A single binary prism can only divide a stream into two. Construct a two-level Decision Tree to isolate all three classes.",
+    goalSentence: "No single split separates three classes — use two prisms to build a small tree that sends each class to its own pure bin.",
     energyLimit: 2, // Max 2 Prisms (Depth 2)
     gridCols: 6,
     gridRows: 5,
@@ -50,29 +54,32 @@ export const LEVELS = [
       shapes: ["Circle", "Square", "Triangle"],
       colors: ["Blue", "Orange"],
       sizes: ["Large"],
-      profiles: ["Blue Circle (Large)", "Blue Square (Large)", "Orange Triangle (Large)"]
+      profiles: ["Blue Circle (Large)", "Blue Square (Large)", "Orange Circle (Large)", "Orange Triangle (Large)"]
     },
     streamDistribution: {
       conditional: (rng) => {
         const r = rng();
-        if (r < 0.35) {
+        if (r < 0.33) {
           // Class Alpha: Blue Circle
           return { shape: "circle", color: "blue", size: "large", targetClass: "Alpha" };
-        } else if (r < 0.70) {
+        } else if (r < 0.65) {
           // Class Beta: Blue Square
           return { shape: "square", color: "blue", size: "large", targetClass: "Beta" };
-        } else {
+        } else if (r < 0.82) {
           // Class Gamma: Orange Triangle
           return { shape: "triangle", color: "orange", size: "large", targetClass: "Gamma" };
+        } else {
+          // Class Gamma: Orange Circle (makes color-only splits insufficient)
+          return { shape: "circle", color: "orange", size: "large", targetClass: "Gamma" };
         }
       }
     },
     targetClasses: ["Alpha", "Beta", "Gamma"],
     requiredPureBins: 3,
     hints: {
-      basic: "No single yes/no question can separate three classes at once. First isolate the distinct color, then place a second prism along the mixed branch to split by shape.",
+      basic: "Orange objects are always Gamma — split on color first to isolate them. But the Blue branch contains both Circles (Alpha) and Squares (Beta). Place a second prism on the Blue branch to split by shape.",
       why: "This creates a Decision Tree: the first prism is the Root Node; its child branch feeds into an internal Decision Node, terminating in Pure Leaves.",
-      math: "The root split on COLOR isolates Orange (Gamma) with zero impurity. The remaining Blue branch still has Gini = 0.500; a second split on SHAPE reduces its impurity to 0.000."
+      math: "The root split on COLOR isolates Orange (Gamma) with zero impurity. The remaining Blue branch still has Gini = 0.500; a second split on SHAPE (circle vs square) reduces its impurity to 0.000."
     }
   },
   {
@@ -81,6 +88,7 @@ export const LEVELS = [
     concept: "Gini Gain vs Shannon Information Gain",
     subtitle: "Evaluating split quality and rejecting uninformative features",
     description: "Multiple features exist, but not all questions are equally informative. An uninformative feature leaves the child streams mixed, producing zero Gain and wasting energy. Find the optimal split.",
+    goalSentence: "Not all features are useful — find the one split that actually reduces disorder and ignore the ones that don't.",
     energyLimit: 2,
     gridCols: 6,
     gridRows: 5,
@@ -123,6 +131,7 @@ export const LEVELS = [
     concept: "Overfitting on Noise vs Unseen Test Data",
     subtitle: "The bias-variance tradeoff and the power of model pruning",
     description: "Training data often contains random noise or outliers. If you place extra prisms to fit every training anomaly, you achieve 100% Training Purity but fail on Unseen Test Data. Discover how pruning restores generalization.",
+    goalSentence: "Build a tree that works on new data, not just training data — extra prisms can hurt you here.",
     energyLimit: 3,
     gridCols: 7,
     gridRows: 5,
@@ -179,6 +188,7 @@ export const LEVELS = [
     concept: "Full Multidimensional Induction",
     subtitle: "Building a decision tree that separates all classes and generalizes to test data",
     description: "A complex multi-feature distribution requiring coordinated hierarchical decisions across Color, Shape, and Size. Build an elegant, compact tree that generalizes reliably across both training and test streams.",
+    goalSentence: "Put it all together — use Color, Shape, and Size wisely to separate all three classes with as few nodes as possible.",
     energyLimit: 4,
     gridCols: 7,
     gridRows: 5,
