@@ -87,9 +87,6 @@ Clicking **"DOWNLOAD PLAYTEST REPORT (PDF)"** generates an official PDF document
 - Contains participant metadata, date, completion stats (100% test accuracy, 5/5 phases).
 - Includes the 5 core machine learning concepts mastered and the player's exact qualitative questionnaire responses.
 - Generates a unique verification seal hash.
-- **Workflow:** Players download their PDF at the end of their session and send it to the repository maintainer, who commits the evidence files into the repository.
-
-A secondary **"PRINT / PREVIEW PDF"** button is also available as a native browser print fallback.
 
 ---
 
